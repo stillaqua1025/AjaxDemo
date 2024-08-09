@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewData["Title"] = "register";
+}
+
+<h1>register</h1>
+<div class="row">
+    <form id="userForm">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <div class="mb-3">
+            <label for="Name"  class="form-label">姓名</label>
+            <input type="text" class="form-control" id="Name" name="Name" />
+        </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label">電子郵件</label>
+            <input type="text" class="form-control" id="Email" name="Email">
+        </div>
+        <div class="mb-3">
+            <label for="Age" class="form-label">年紀</label>
+            <input type="text" class="form-control" id="Age" name="Age">
+        </div>
+            <div class="mb-3">
+                <label for="Photo" class="form-label">Multiple files input example</label>
+                <input class="form-control" type="file" id="Photo" name="Photo" multiple>
+            </div>
+
+        <button type="submit" id="btn1" class="btn btn-primary">Click</button>
+
+        <div id="div1" class="alert alert-info mt-3"></div>
+    </div>
+    <div class="col-3"></div>
+    </form>
+</div>
+@* <input type="text" id="Name" />
+<input type="email" id="Email" />
+<input type="number" id="Age" />
+<button id="btn1">點我</button> *@
+<div id="div1">
+
+</div>
+
+
+@section Styles{
+    <style></style>
+}
+@section Scripts{
+    <script>
+        const divinfo = document.querySelector('#div1')
+        const btn = document.querySelector('#btn1')
+        // const inputName = document.querySelector('#Name')
+        // const inputEmail = document.querySelector('#Email')
+        // const inputAge = document.querySelector('#Age')
+        
+
+        btn.addEventListener('click', async (event) => 
+        {
+           
+        const formData = new FormData(document.querySelector('#userForm'))  //要放在點擊事件裡面，表單才會有值
+            event.preventDefault();
+            try {
+                // const api = `@Url.Content("~/api/register")/${inputName.value}/${inputEmail.value}/${inputAge.value}`
+                const api = '@Url.Content("~/api/register")'
+                const response = await fetch(api,{method:'POST',body:formData})
+                console.log(response)
+                if (!response.ok) {
+                    throw new Error(`${response.status}`)
+                }
+                const data = await response.text()
+                divinfo.innerHTML = `<h3>${data}</h3>`
+            } catch(error) {
+                alert("伺服器無回應")
+            }
+            
+        })
+
+    </script>
+}
+

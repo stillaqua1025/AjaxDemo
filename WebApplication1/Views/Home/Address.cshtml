@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Address";
+}
+
+<h1>Address</h1>
+<select id="sel">
+    <option >請選擇</option>
+</select>
+<select id="sel2">
+    <option>請選擇</option>
+</select>
+<select id="sel3">
+    <option>請選擇</option>
+</select>
+<div id="div1"></div>
+
+@section Styles{
+    <style></style>
+}
+@section Scripts{
+    <script>
+        (async () => {
+            const response = await fetch('@Url.Content("~/Api/Cities")')
+            const datas = await response.json();
+            console.log(datas)
+            const cities = datas.map(city => {return(`<option value = "${city}">${city}</option>`)})
+            //console.log(cities.join(""))
+            selectof.insertAdjacentHTML('beforeend',cities.join(""))
+        })()
+
+
+        const selectof = document.querySelector('#sel')
+        const divinfo = document.querySelector('#div1')
+        const selsite = document.querySelector('#sel2')
+        const selroad = document.querySelector('#sel3')
+
+        selectof.addEventListener('change', async () => {
+            const i = selectof.selectedIndex
+            //console.log(selCity.options[i].value)
+            //console.log(selCity.options[i].text)
+            const api = `@Url.Content("~/api/SitesByCity")?City=${selectof.options[i].text}`
+            const response = await fetch(api)
+            const datas = await response.json()
+            //console.log(datas)
+            const sites = datas.map(site => { return (`<option value = "${site}">${site}</option>`) })
+            //console.log(sites.join(""))
+            selsite.insertAdjacentHTML('beforeend',sites.join(""))
+        })
+        selsite.addEventListener('change', async () => {
+            const i = selsite.selectedIndex
+            //console.log(selCity.options[i].value)
+            //console.log(selCity.options[i].text)
+            const api = `@Url.Content("~/api/RoadsBySide")?Side=${selsite.options[i].text}`
+            const response = await fetch(api)
+            const datas = await response.json()
+            console.log(datas)
+            const roads = datas.map(roads => { return (`<option value = "${roads}">${roads}</option>`) })
+            //console.log(sites.join(""))
+            selroad.insertAdjacentHTML('beforeend', roads.join(""))
+        })
+    </script>
+}

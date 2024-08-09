@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "Show";
+}
+
+<h1>Show</h1>
+<input type="number" id="imgid" />
+<br />
+<img id="img1" class="w-50 img-thumbnail" />
+
+@section Styles{
+    <style></style>
+}
+@section Scripts{
+    <script>
+        const imgshow = document.querySelector('#img1')
+        const imgid = document.querySelector('#imgid')
+
+        imgid.addEventListener('keydown', async (e) => {
+            if (e.which === 13) {
+            const response = await fetch(`@Url.Content("~/api/Avatar/")${imgid.value}`)
+                if (response.ok) {
+                    //顯示圖片
+                const img = await response.blob()
+                  imgshow.src = URL.createObjectURL(img)
+                }
+                else { alert('找不到圖')}
+            }
+        })
+        // (async() => {
+        //     const response = await fetch('@Url.Content("~/api/Avatar")')
+        //     const img = await response.blob()
+
+        //     imgshow.src = URL.createObjectURL(img)
+        // })()
+    </script>
+}
+

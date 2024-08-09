@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewData["Title"] = "CallAPI";
+}
+
+<img class="mx-auto d-block" src="~/images/senbonsakura.gif" />
+
+<h1>ShowAPI</h1>
+<button id="btn1" class="btn btn-primary">CallAPI</button>
+<button id="btn2" class="btn btn-danger">StopCallAPI</button>
+<img id="img1" src="~/images/loading.gif" alt="執行中" style="display:none" />
+<div id="div1" class="alert alert-secondary mt-3" >
+
+</div>
+
+@section Styles{
+    <style></style>
+}
+@section Scripts{
+    <script>
+
+        //找到要控制對象
+        var btncall = document.querySelector('#btn1');
+        var divMessage = document.querySelector('#div1')
+        var imageloading = document.querySelector('#img1')
+        var btnstop = document.querySelector('#btn2')
+
+        let abortController;
+
+
+//登記事件
+        // btncall.addEventListener('click', () => 
+        // {fetch('@Url.Content("~/api/index")')
+        // .then(response =>{ console.log(response);
+        //     return response.text()})
+        //     .then(data => { divMessage.innerHTML = `<h3>${data}</h3>` })
+        // })
+
+        
+        
+        //async await版本
+        btncall.addEventListener('click', async () => {
+
+            //顯示執行中
+            imageloading.style.display = "inline"
+            btncall.setAttribute("disabled","disabled")
+            btncall.textContent = "執行中..."
+
+            //產生absort訊號
+            abortController = new AbortController()
+            const signal = abortController.signal
+            setTimeout(() => { abortController.abort()}, 10000)
+
+            //執行fetch
+            try {
+                const response = await fetch('@Url.Content("~/api/index")', {signal})
+                if (!response.ok) {
+                    throw new Error(`${response.status}`)
+                }
+                const data = await response.text()
+                divMessage.innerHTML = `<h4>${data}</h4>`
+            } catch (error) {
+                let message = error.message
+                if (error.name === 'AbortError') {
+                    message = '伺服器忙碌中，請稍後再試'
+                }
+                divMessage.innerHTML = `<h4>${message}</h4>`
+            }finally{
+                imageloading.style.display = "none"
+                btncall.removeAttribute("disabled")
+            }
+        })
+        btnstop.addEventListener('click', () => {
+            if (abortController) {
+                abortController.abort()
+            }
+        })
+    </script>
+}

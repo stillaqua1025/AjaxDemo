@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewData["Title"] = "JsonTest";
+}
+
+<h1>Homework1</h1>
+<ul id="ul">
+    
+</ul>
+
+<div id="cards1" >
+    
+</div>
+
+
+
+
+@section Styles{
+    <style>
+        h1{
+
+        }
+    </style>
+}
+@section Scripts{
+    <script src="~/js/travel.js"></script>
+    <script>
+       const theul = document.querySelector('#ul');
+       const emps = 
+       [{ "name": "Tom", "workYears": 3, "salary": 35000 },
+        { "name": "Jack", "workYears": 5, "salary": 40000 },
+        { "name": "Mary", "workYears": 7, "salary": 45000 }];
+
+        const data = emps.map(emp => {
+            return(`<li>${emp.name}</li>`)
+        })
+        theul.innerHTML = data.join("")
+    </script>
+    <script>
+        const cards = document.querySelector('#cards1')
+        const datas = spots.CommonFormat.Section.map(ele => 
+        {
+            //const img = ele.file
+            console.log(ele.RowNumber)
+            console.log(ele.file.img[0].text)
+            
+            // console.log(img[0].text)
+            return (`<div class="card">
+                 <img src="${ele.file.img[0].text}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">${ele.stitle}</h5>
+                    <p class="card-text">${ele.xbody.substring(0, 50)}</p>
+                    <p class="card-text"><small class="text-muted">${ele.address}</small></p>
+               </div>
+            </div>`)
+        })
+        // console.log(datas.join(""))
+        cards.innerHTML = datas.join("")
+    </script>
+}
