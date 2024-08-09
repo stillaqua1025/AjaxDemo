@@ -11,6 +11,7 @@
         <div class="mb-3">
             <label for="Name"  class="form-label">姓名</label>
             <input type="text" class="form-control" id="Name" name="Name" />
+            <span id="spanName" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label for="Email" class="form-label">電子郵件</label>
@@ -21,7 +22,7 @@
             <input type="text" class="form-control" id="Age" name="Age">
         </div>
             <div class="mb-3">
-                <label for="Photo" class="form-label">Multiple files input example</label>
+                <label for="Photo" class="form-label">大頭貼</label>
                 <input class="form-control" type="file" id="Photo" name="Photo" multiple>
             </div>
 
@@ -48,6 +49,7 @@
     <script>
         const divinfo = document.querySelector('#div1')
         const btn = document.querySelector('#btn1')
+        const spnmessage = document.querySelector('#spanName')
         // const inputName = document.querySelector('#Name')
         // const inputEmail = document.querySelector('#Email')
         // const inputAge = document.querySelector('#Age')
@@ -67,7 +69,8 @@
                     throw new Error(`${response.status}`)
                 }
                 const data = await response.text()
-                divinfo.innerHTML = `<h3>${data}</h3>`
+                //divinfo.innerHTML = `<h3>${data}</h3>`
+                spnmessage.textContent = data;
             } catch(error) {
                 alert("伺服器無回應")
             }

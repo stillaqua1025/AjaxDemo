@@ -68,16 +68,29 @@ namespace WebApplication1.Controllers
                 _user.Name = "???";
             }
 
-            //上傳圖片
-            //取得根目錄路徑
-            string path = Path.Combine(_environment.WebRootPath, "uploads", _user.Photo.FileName);
-            using (var filestream = new FileStream(path, FileMode.Create))
+            //驗證姓名是否存在
+            var q = _db.Members.Where(x=>x.Name==_user.Name).Select(x=>x.Name).ToList();
+            if (q.Count == 0)
             {
-                _user.Photo.CopyTo(filestream);
+                return Content("帳號可使用", "text/palin", Encoding.UTF8);
+            }
+            else 
+            {
+                return Content("帳號已存在", "text/palin", Encoding.UTF8);
             }
 
+            //上傳圖片
+            //取得根目錄路徑
+            //if (_user.Photo != null)
+            //{
+            //    string path = Path.Combine(_environment.WebRootPath, "uploads", _user.Photo.FileName);
+            //    using (var filestream = new FileStream(path, FileMode.Create))
+            //    {
+            //        _user.Photo.CopyTo(filestream);
+            //    }
+            //}
             //return Content($"{_user.Name}-{_user.Email}-{_user.Age}","text/palin",Encoding.UTF8);
-            return Content($"{_user.Photo.FileName}-{_user.Photo.Length}-{_user.Photo.ContentType}", "text/palin", Encoding.UTF8);
+            //return Content($"{_user.Photo.FileName}-{_user.Photo.Length}-{_user.Photo.ContentType}", "text/palin", Encoding.UTF8);
         }
     }
 }
